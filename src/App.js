@@ -21,6 +21,21 @@ class App extends Component {
     this.deleteContact = this.deleteContact.bind(this);
   }
 
+  componentDidMount() {
+    //монтируем компонент, проверяем локал стораж
+    const localContacts = localStorage.getItem('contacts');
+    if (localContacts !== null) {
+      this.setState({ contacts: JSON.parse(localContacts) });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    //при обновлении компонента проверим изменились ли данные по контактам и записываем в локал стаж
+    if (prevState !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   deleteContact = contactId => {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(el => el.id !== contactId),
